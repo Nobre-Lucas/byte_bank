@@ -77,13 +77,13 @@ public class ContaDAO {
 	public Conta listarPorNumero(Integer numero) {
 		String sql = "SELECT * FROM conta WHERE numero = ?";
 
-		PreparedStatement ps;
+		PreparedStatement preparedStatement;
 		ResultSet resultSet;
 		Conta conta = null;
 		try {
-			ps = connection.prepareStatement(sql);
-			ps.setInt(1, numero);
-			resultSet = ps.executeQuery();
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, numero);
+			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				Integer numeroRecuperado = resultSet.getInt(1);
@@ -98,7 +98,7 @@ public class ContaDAO {
 				conta = new Conta(numeroRecuperado, saldo, cliente);
 			}
 			resultSet.close();
-			ps.close();
+			preparedStatement.close();
 			connection.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
