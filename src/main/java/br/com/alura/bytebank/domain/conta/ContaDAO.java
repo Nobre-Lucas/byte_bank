@@ -138,6 +138,7 @@ public class ContaDAO {
 
 		try {
 			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, numeroDaConta);
 			preparedStatement.execute();
 			preparedStatement.close();
 			connection.close();
