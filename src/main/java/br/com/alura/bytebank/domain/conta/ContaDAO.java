@@ -106,17 +106,28 @@ public class ContaDAO {
 		return conta;
 	}
 
-	public void alteraValor(Integer numeroDaConta, BigDecimal valor) {
-		PreparedStatement preparedStatement;
+	public void alteraValor(Integer numero, BigDecimal valor) {
+		PreparedStatement ps;
 		String sql = "UPDATE conta SET saldo = ? WHERE numero = ?";
 
 		try {
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setBigDecimal(1, valor);
-			preparedStatement.setInt(2, numeroDaConta);
+			connection.setAutoCommit(false);
 
-			preparedStatement.execute();
+			ps = connection.prepareStatement(sql);
+
+			ps.setBigDecimal(1, valor);
+			ps.setInt(2, numero);
+
+			ps.execute();
+			connection.commit();
+			ps.close();
+			connection.close();
 		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			throw new RuntimeException(e);
 		}
 	}
